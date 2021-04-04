@@ -7,6 +7,21 @@
     <title>Document</title>
 </head>
 <body>
-<script src="./scripts/hw01_script.js" ></script>
+    <script>
+        var userTempType = prompt("Цельсий в Фаренгейт - нажмите 'c'.\nФаренгейт в Цельсий - нажмите 'f': ")
+        var userDegrees = parseInt(prompt("Введите количество градусов: "))
+        if (isNaN(userDegrees)) {
+            alert('Not a Number!');
+        } else if (userTempType == "f") {
+            var Tc = (userDegrees - 32) * 5 / 9;
+            alert(Tc.toFixed(2));
+        } else if (userTempType == "c") {
+            var Tf = (9 / 5) * userDegrees + 32;
+            alert(Tf.toFixed(2));
+        } else {
+            alert("Некорректный ввод типа градусов. Попробуйте еще раз!")
+        }
+    </script>
+<!-- <script src="./scripts/hw01_script.js" type="text/javascript"></script> -->
 </body>
 </html>
