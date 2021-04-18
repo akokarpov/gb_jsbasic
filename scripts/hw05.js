@@ -3,7 +3,7 @@
 // 2. Заполнить созданную таблицу буквами, отвечающими за шахматную фигуру, например К – король, Ф – ферзь и т.п., причем все фигуры должны стоять на своих местах и быть соответственно черными и белыми.
 // 3. *Заменить буквы, обозначающие фигуры, картинками.
 
-function renderChessboard(n=9) {
+function renderChessboard(n = 9) {
 
     const LETTERS = ["A", "B", "C", "D", "E", "F", "G", "H"];
     const NUMBERS = ["1", "2", "3", "4", "5", "6", "7", "8"];
@@ -42,28 +42,28 @@ function renderChessboard(n=9) {
         [8, 7, "https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg"],
     ];
 
-    for (let i = 0; i < n; i++) {
+    for (let row = 0; row < n; row++) {
 
         let column = document.createElement("div");
 
-        for (let j = 0; j < n; j++) {
+        for (let col = 0; col < n; col++) {
 
             let border = true;
             let box = document.createElement("div");
-            let color = (i + j) % 2 === 0 ? "white" : "black";
+            let color = (row + col) % 2 === 0 ? "white" : "black";
 
-            if (i === 0 || j === 0) {
+            if (row === 0 || col === 0) {
                 color = "white";
                 border = false;
             }
 
-            if (i === 0 && j > 0 && j <= NUMBERS.length) {
-                box.innerText = NUMBERS[8 - j]
+            if (row === 0 && col > 0 && col <= NUMBERS.length) {
+                box.innerText = NUMBERS[8 - col]
                 border = false;
             }
 
-            if (i > 0 && j === 0 && i <= LETTERS.length) {
-                box.innerText = LETTERS[i - 1];
+            if (row > 0 && col === 0 && row <= LETTERS.length) {
+                box.innerText = LETTERS[row - 1];
                 border = false;
             }
 
@@ -71,11 +71,18 @@ function renderChessboard(n=9) {
                 box.classList.add("no__border");
             }
 
-            for (k = 0; k < PIECES.length; k++) {
-                if (PIECES[k][0] === i && PIECES[k][1] === j) {
-                    box.style.backgroundImage = `url(${PIECES[k][2]})`;
-                }
+            const piece = PIECES.find(function (piece) {
+                return piece[0] === row && piece[1] === col;
+            });
+            if (piece) {
+                box.style.backgroundImage = `url(${piece[2]})`;
             }
+
+            // for (k = 0; k < PIECES.length; k++) {
+            //     if (PIECES[k][0] === row && PIECES[k][1] === col) {
+            //         box.style.backgroundImage = `url(${PIECES[k][2]})`;
+            //     }
+            // }
 
             box.classList.add("transparent__box", `${color}__box`);
 
