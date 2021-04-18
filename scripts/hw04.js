@@ -15,13 +15,6 @@ function numberToDigits(number) {
     if (number < 0 || number > 999 || Number.isInteger(number) !== true) {
         console.log("Error: should be a number between 0 and 999.");
 
-    } else if (number > 0 && number < 9) {
-        obj.units = number;
-
-    } else if (number > 9 && number < 99) {
-        obj.tens = Math.floor(number / TENS);
-        obj.units = number % TENS;
-
     } else {
         obj.hundreds = Math.floor(number / HUNDREDS);
         obj.tens = Math.floor(number % HUNDREDS / TENS);
@@ -108,8 +101,7 @@ let mover = {
                 continue;
             }
 
-            // Если пользователь ввел корректное значение - отдаем его + обновляем количество ходов
-            player.counterMoves += 1;
+            // Если пользователь ввел корректное значение - отдаем его
             return direction;
         }
     },
@@ -165,6 +157,7 @@ let game = {
 
             renderer.clear();
             player.move(nextPoint);
+            player.counterMoves += 1;
             renderer.render();
 
         }
@@ -183,98 +176,103 @@ game.init();
 
 // 3. *На базе игры, созданной на уроке, реализовать игру «Кто хочет стать миллионером?»
 
-let validAnswers = ["1", "2", "3", "4"];
-let isGameOver = false;
-let player = {
-    score: 0,
+let game = {
+
+    isGameOver: false,
+
+    questionnaire: [
+        {
+            question: "Какой писатель написал 'Горе от ума'?",
+            "1": "Грибоедов",
+            "2": "Пушкин",
+            "3": "Лермонтов",
+            "4": "Достоевский",
+            answer: "1",
+            score: 100,
+        },
+        {
+            question: "В каком году в РФ появилась игровая приставка Dendy(NES)?",
+            "1": 1990,
+            "2": 1991,
+            "3": 1992,
+            "4": 1993,
+            answer: "3",
+            score: 1000,
+        },
+        {
+            question: "Кто придумал JavaScript?",
+            "1": "Кевин Систер",
+            "2": "Брендан Эйх",
+            "3": "Павел Дуров",
+            "4": "Сергей Брин",
+            answer: "2",
+            score: 10000,
+        },
+    ],
+
+    checkAvailableQuestions() {
+        let exit = prompt("Нахмите 'q' для выхода или любую клавишу, чтобы продолжить.");
+        console.clear()
+        if (exit === 'q') {
+            console.log(`Выход из игры.\nВы заработали ${user.score} очков.`)
+            return true;
+        } else if (this.questionnaire.length > 0) {
+            return false;
+        } else {
+            console.log(`Вопросы закончились! Конец игры. \nВы заработали ${user.score} очков.`)
+            return true
+        }
+
+    },
+
+    nextRandQuestion() {
+        let randIndex = Math.floor(Math.random() * this.questionnaire.length);
+        let nextQuestion = this.questionnaire[randIndex]
+        this.questionnaire.splice(randIndex, 1);
+        console.log(nextQuestion.question);
+        console.log(`1: ${nextQuestion[1]}. 2: ${nextQuestion[2]}. 3: ${nextQuestion[3]}. 4: ${nextQuestion[3]}`);
+        return nextQuestion;
+    },
+
+    checkUserAnswer(userAnswer, nextQuestion) {
+        if (userAnswer === nextQuestion.answer) {
+            console.log(`Верно! Вы заработали ${nextQuestion.score} очков.`);
+            user.score += nextQuestion.score;
+        } else {
+            console.log(`Неверно! Правильный ответ: ${nextQuestion[nextQuestion.answer]}.`);
+        }
+    },
+
+    run() {
+        console.clear()
+        while (this.isGameOver !== true) {
+            let nextQuestion = this.nextRandQuestion();
+            this.checkUserAnswer(user.getUserAnswer(), nextQuestion);
+            this.isGameOver = this.checkAvailableQuestions();
+        }
+        return;
+    },
+
     init() {
-        console.log("Добро пожаловать на 'Кто хочет стать миллионером?'\nЧтобы начать игру наберите play() и нажмите Enter.");
-    }
-}
-
-let questionnaire = [
-    {
-        question: "Какой писатель написал 'Горе от ума'?",
-        "1": "Грибоедов",
-        "2": "Пушкин",
-        "3": "Лермонтов",
-        "4": "Достоевский",
-        answer: "1",
-        score: 100,
+        console.log("Чтобы начать игру наберите game.run() и нажмите Enter.");
     },
-    {
-        question: "В каком году в РФ появилась игровая приставка Dendy(NES)?",
-        "1": 1990,
-        "2": 1991,
-        "3": 1992,
-        "4": 1993,
-        answer: "3",
-        score: 1000,
+}
+
+
+let user = {
+
+    score: 0,
+
+    validAnswers: ["1", "2", "3", "4"],
+
+    getUserAnswer() {
+        let userAnswer = "";
+        while (!this.validAnswers.includes(userAnswer)) {
+            userAnswer = prompt("Ответ?");
+        }
+        return userAnswer;
     },
-    {
-        question: "Кто придумал JavaScript?",
-        "1": "Кевин Систер",
-        "2": "Брендан Эйх",
-        "3": "Павел Дуров",
-        "4": "Сергей Брин",
-        answer: "2",
-        score: 10000,
-    },
-];
-
-function checkUserAnswer(userAnswer, nextQuestion) {
-    if (userAnswer === nextQuestion.answer) {
-        console.log(`Верно! Вы заработали ${nextQuestion.score} очков.`);
-        player.score += nextQuestion.score;
-    } else {
-        console.log(`Неверно! Правильный ответ: ${nextQuestion[nextQuestion.answer]}.`);
-    }
-}
-
-function nextRandQuestion() {
-    let randIndex = Math.floor(Math.random() * questionnaire.length);
-    nextQuestion = questionnaire[randIndex]
-    questionnaire.splice(randIndex, 1);
-    console.log(nextQuestion.question);
-    console.log(`1: ${nextQuestion[1]}. 2: ${nextQuestion[2]}. 3: ${nextQuestion[3]}. 4: ${nextQuestion[3]}`);
-    return nextQuestion;
-}
-
-function getUserAnswer() {
-    let userAnswer = "";
-    while (!validAnswers.includes(userAnswer)) {
-        userAnswer = prompt("Ответ?");
-    }
-    return userAnswer;
-}
-
-function checkAvailableQuestions() {
-    exit = prompt("Нахмите 'q' для выхода или любую клавишу, чтобы продолжить.");
-    console.clear()
-    if (exit === 'q') {
-        console.log(`Выход из игры.\nВы заработали ${player.score} очков.`)
-        return true;
-    } else if (questionnaire.length > 0) {
-        return false;
-    } else {
-        console.log(`Вопросы закончились! Конец игры. \nВы заработали ${player.score} очков.`)
-        return true
-    }
 
 }
 
-//основной модуль игры с 3 функциями: генерация нового вопроса из массива, проверка ответа, проверка количества оставшихся вопросов. Для запуска игры в консоли набрать play()
-function play() {
-
-    console.clear()
-
-    while (isGameOver !== true) {
-        nextQuestion = nextRandQuestion();
-        checkUserAnswer(getUserAnswer(), nextQuestion);
-        isGameOver = checkAvailableQuestions();
-    }
-
-    return;
-}
-
-player.init()
+game.init()
