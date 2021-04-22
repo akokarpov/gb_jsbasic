@@ -65,7 +65,7 @@ function renderBigImage(id) {
     const gallery = document.getElementsByClassName("gallery")[0];
     gallery.innerHTML = "";
     image.id = `image-${id}`;
-    image.src = `1https://picsum.photos/seed/${id}/800`;
+    image.src = `https://picsum.photos/seed/${id}/800`;
     image.alt = `Изображение ${id}`;
     gallery.appendChild(image);
 
