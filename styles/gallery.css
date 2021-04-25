@@ -1,0 +1,55 @@
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    text-align: center;
+}
+
+.content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.gallery {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+.gallery img {
+    width: 400px;
+    height: 400px;
+}
+
+.thumbnails {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 20px;
+}
+.thumbnails img {
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 150ms ease-in-out;
+}
+.thumbnails img:hover {
+    transform: translateY(-5px);
+}
+
+.slider__button {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    font-size: 50px;
+    color: darkblue;
+}
