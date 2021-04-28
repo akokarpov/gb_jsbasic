@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var a = 2;
+        if (!(a in window)) {
+            var a = 1;
+        }
+        alert(a);
+        // >>> undefined, так как "a" является string. Если в условии a прописывать без кавычек - такой же результат. Необходимо объявлять переменную a ранее условия, чтобы код работал.
+
+        var b = function a(x) {
+            x && a(--x);
+        };
+        alert(a);
+        // >>> невалидный код, так как переменная a нигде не объявлена.
+
+        function a(x) {
+            return x * 2;
+        }
+        var a;
+        alert(a);
+        // >>> Выполнение функции без переданных атрибутов. Declaration function имеет более высокий приоритет. JS пробегает по файлу и выполняет эту функцию в первую очередь, не доходя до var a.
+
+
+        function b(x, y, a) {
+            arguments[2] = 10;
+            alert(a);
+        }
+        b(1, 2, 3);
+        // >>> Объект agruments переписывает значение второго позиционного аргумента a=3 на a=10. Функция выводит 10.
+
+
+        function a() {
+            alert(this);
+        }
+        a.call(null);
+        // >>> Так как call() не передает ни функцию, ни агрументы, а только null, то функция a() выводит alert ссылаясь на cаму страницу.
+    </script>
+</body>
+
+</html>
